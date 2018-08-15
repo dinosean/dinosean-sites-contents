@@ -15,9 +15,12 @@ fi
 
 echo Site URL: $1
 
-ID=`echo $1@dinosean | $MD5CMD | awk '{print $1}'`
+ID=`echo "$1@dinosean" | $MD5CMD | awk '{print $1}'`
 echo Site ID: $ID
 
 echo Generate a site file.
 cp $SITES_DIR/.template.md $SITES_DIR/$ID.md
-sed "s|{{ title }}|$1|g" $SITES_DIR/.template.md > $SITES_DIR/$ID.md
+
+# replace & to \& in the url string
+REPLACEMENT=`echo "$1" | sed "s|&|\\\\\&|g"`
+sed "s|{{ title }}|$REPLACEMENT|g" $SITES_DIR/.template.md > $SITES_DIR/$ID.md
